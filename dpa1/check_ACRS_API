@@ -1,0 +1,22 @@
+#!/bin/bash
+# ----------------------------------------------------------
+#title           :check_ACRS_API
+#description     :This script is used to check for ACRS API 
+#author          :Jason Wang 
+#email           :jw7698@att.com
+#date            :20140923
+#version         :0.1
+#usage           :check_ACRS_API (returns either exit 0 or 2)
+#notes           :Intended to be in /usr/lib/nagios/plugins on ACRS traffic server 
+# ----------------------------------------------------------
+
+#192.168.0.6: DPA1 ACRS traffic server 
+status=`curl -silent -k -u topaz_monitor:t0p\@zm0n https://192.168.0.6:8443/acrs/rest/getAllKeys | grep HTTP | awk '{print $2}'`
+
+#If the HTTP status check not equal to 200?
+if [ $status -ne 200 ]; then
+    echo "ERROR: ACRS API call failed"
+    exit 2
+fi
+
+echo "OK: ACRS Health Checks passed"
