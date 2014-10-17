@@ -6,18 +6,19 @@
 #email           :jw7698@att.com
 #date            :20141017
 #version         :0.1
-#usage           :hostname_change (returns either exit 0 or 2)
+#usage           :1. login to server
+#                :2. bash <(wget -qO - https://raw.githubusercontent.com/jason75023/LTMI/master/PSL/hostname_change)
 # ----------------------------------------------------------
 
-#sed -i.bak 's/dpa/iad/' /etc/sysconfig/network
 
-#sed -i.bak 's/dpa/iad/' /etc/hosts
+sed -i.bak 's/dpa/iad/' /etc/sysconfig/network
 
-echo "enter hostname info \n"
+sed -i.bak 's/dpa/iad/' /etc/hosts
+
+
 read -p "Enter hostname > " h
+hostname $h
 
-#hostname $h
+sed -i.bak 's/dpa/iad/' /etc/motd
 
-#sed -i.bak 's/dpa/iad/' /etc/motd
-
-#/etc/init.d/network restart
+/etc/init.d/network restart
