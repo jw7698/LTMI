@@ -9,13 +9,15 @@
 #usage           :hostname_change (returns either exit 0 or 2)
 # ----------------------------------------------------------
 
-sed -i.bak 's/dpa/iad/' /etc/sysconfig/network
+#sed -i.bak 's/dpa/iad/' /etc/sysconfig/network
 
-sed -i.bak 's/dpa/iad/' /etc/hosts
+#sed -i.bak 's/dpa/iad/' /etc/hosts
 
+echo "enter hostname info \n"
 read -p "Enter hostname > " h
-hostname $h
 
-sed -i.bak 's/dpa/iad/' /etc/motd
+#hostname $h
 
-/etc/init.d/network restart
+#sed -i.bak 's/dpa/iad/' /etc/motd
+
+#/etc/init.d/network restart
