@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+# Script to perform haproxy upgrade and SSL poodle patch/fallback
+# Prequirement: 
+# Make sure poodle.sh and haproxy-1.4.24-2.el6.x86_64.rpm is under /root directory
+#
+
+upgrade() {
+echo "stop haproxy service"
+service haproxy stop
+
+echo "start haproxy package upgrade"
+yum update haproxy.x86_64
+
+echo "check current haproxy package version after upgrade"
+rpm -qa haproxy
+
+echo "start to patch haproxy for SSL poodle vulnerability"
+sed -i.20141110 '/bind.*:443/s/$/ no-sslv3/' /etc/haproxy/haproxy.cfg
+
+echo "start haproxy service"
+service haproxy start
+
+return
+}
+
+fallback() {
+echo "stop haproxy service"
+service haproxy stop
+
+echo "start haproxy package downgrade"
+rpm -ivhU --force /root/haproxy-1.4.24-2.el6.x86_64.rpm
+
+echo "update haproxt cfg to original setup"
+cp -p /etc/haproxy/haproxy.cfg.20141110 /etc/haproxy/haproxy.cfg
+
+echo "restart haproxy"
+service haproxy start
+
+return
+}
+
+SSLcheck() {
+echo "check ssl poodle security"
+bash /root/poodle.sh localhost 443
+
+return
+}
+
+#
+# MAIN program
+#
+IFS='
+'
+MENU="
+Upgrade haproxy and patch SSL poodle vulnerabilty
+fallback haproxy upgrade and SSL poodle vulnerability patch
+SSL poodle  security check
+Exit/Stop
+"
+PS3='Select task:'
+select m1 in $MENU
+do
+  case $REPLY in
+   1) upgrade;;
+   2) fallback;;
+   3) SSLcheck;;
+   4) exit 0 ;;
+  esac
+
+done
