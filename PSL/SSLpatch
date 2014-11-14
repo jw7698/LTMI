@@ -21,8 +21,8 @@ sed -i.`date +%Y%m%d` '/bind.*:443/a\
     acl sslv3 req.ssl_ver 3\
     tcp-request content reject if sslv3' /etc/haproxy/haproxy.cfg
 
-echo "restart haproxy service"
-service haproxy restart
+echo "start haproxy service"
+service haproxy start
 
 return
 }
