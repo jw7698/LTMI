@@ -16,7 +16,10 @@ echo "check current haproxy package version after upgrade"
 rpm -qa haproxy
 
 echo "start to patch haproxy for SSL poodle vulnerability"
-sed -i.20141110 '/bind.*:443/s/$/ no-sslv3/' /etc/haproxy/haproxy.cfg
+sed -i.`date +%Y%m%d` '/bind.*:443/a\
+    tcp-request inspect-delay 2s\
+    acl sslv3 req.ssl_ver 3\
+    tcp-request content reject if sslv3' /etc/haproxy/haproxy.cfg
 
 echo "start haproxy service"
 service haproxy start
