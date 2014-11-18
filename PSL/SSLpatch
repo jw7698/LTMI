@@ -35,7 +35,7 @@ echo "start haproxy package downgrade"
 rpm -ivhU --force /root/haproxy-1.4.24-2.el6.x86_64.rpm
 
 echo "update haproxt cfg to original setup"
-cp -p /etc/haproxy/haproxy.cfg.20141110 /etc/haproxy/haproxy.cfg
+cp -p /etc/haproxy/haproxy.cfg.`date +%Y%m%d` /etc/haproxy/haproxy.cfg
 
 echo "restart haproxy"
 service haproxy start
