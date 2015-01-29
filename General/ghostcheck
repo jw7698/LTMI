@@ -1,0 +1,8 @@
+#!/bin/bash
+#copy check script and verify security status
+for i in admin traffic db nagios splfwd
+do
+         #scp ~/GHOST $i:~
+         echo "*** $i ***"
+         ssh -t $i "~/GHOST"
+done
