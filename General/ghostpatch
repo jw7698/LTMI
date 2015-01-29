@@ -1,0 +1,19 @@
+#!/bin/bash
+#Prerequirement:
+#glibc-2.12-1.149.el6_6.5.x86_64.rpm and GHOST.c are download under ~ directory
+#Usage:
+#put this script under lb:/root
+#./ghostpatch
+#
+for i in admin traffic db nagios splfwd
+do
+   scp glibc-2.12-1.149.el6_6.5.x86_64.rpm $i:~
+   scp glibc-common-2.12-1.149.el6_6.5.x86_64.rpm $i:~
+   scp glibc-devel-2.12-1.149.el6_6.5.x86_64.rpm $i:~
+   scp glibc-headers-2.12-1.149.el6_6.5.x86_64.rpm $i:~
+   #scp GHOST.c $i:~
+   #ssh -t $i "gcc ~/GHOST.c -o ~/GHOST"
+   ssh -t $i "~/GHOST"
+   ssh -t $i 'rpm -ivhU `ls glibc*`'
+   ssh -t $i "~/GHOST"
+done
