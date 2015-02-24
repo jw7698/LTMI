@@ -49,6 +49,10 @@ nova list | grep acrs
 return
 }
 
+image_check() {
+nova image-list | grep gold
+return
+}
 
 #
 # MAIN program
@@ -65,6 +69,7 @@ shutdown VM
 snapshot image creation
 start VM 
 nova check 
+image check 
 Exit/Stop
 "
 PS3='Select task:'
@@ -75,6 +80,7 @@ case $REPLY in
 2) snapshotimage;;
 3) start;;
 4) nova_check;;
-5) exit 0 ;;
+5) image_check;;
+6) exit 0 ;;
 esac
 done
