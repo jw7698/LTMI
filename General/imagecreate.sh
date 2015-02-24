@@ -64,6 +64,7 @@ MENU="
 shutdown VM
 snapshot image creation
 start VM 
+nova check 
 Exit/Stop
 "
 PS3='Select task:'
