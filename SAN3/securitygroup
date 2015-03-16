@@ -1,0 +1,97 @@
+#!/bin/bash
+########################################################################################## 
+## This script is to create security groups:  LTMI_ACRS_External,  LTMI_ACRS_Internal   ##
+## Version 1                                                                            ##                                                             ##
+## created by Jason Wang on March 16, 2015                                              ##                                   ##
+## Working tenant : SAN3 (ltmi-acrs-prod )                                              ##                                         ##
+##########################################################################################
+#define security group
+nova secgroup-create LTMI_ACRS_External "Security Group for All ACRS Nodes exposed to public network"
+nova secgroup-create LTMI_ACRS_Internal "Sec Group for ALL ACRS Internal Nodes"
+
+###for each VMs to apply during VM creation ### 
+#iad1-acrs-lb, dpa1-acrs-db01, dpa1-acrs-admin, dpa1-acrs-traffic01, dpa1-acrs-nagios, dpa1-acrs-splfwd
+#icmp check allow for Corp_VPN defined IP 
+#nova add-secgroup iad1-acrs-lb Corp_VPN_ICMP
+#ssh access  allow for Corp_VPN defined IP 
+#nova add-secgroup iad1-acrs-lb Corp_VPN
+
+###define secrity rule in  LTMI_ACRS_External###
+#ICMP between ACRS VMs
+nova secgroup-add-rule  LTMI_ACRS_External ICMP -1 -1 0.0.0.0/0
+
+
+#ssh access setup between ACRS VMs
+nova secgroup-add-group-rule  LTMI_ACRS_External  tcp 22 22 0.0.0.0/0 
+nova secgroup-add-group-rule  LTMI_ACRS_External LTMI_ACRS_External tcp 22 22
+
+#haproxy open port for client but for Corp_VPN defioned IP only /ssh access above can cover this setup 
+nova secgroup-add-rule  LTMI_ACRS_External tcp 443 443 0.0.0.0/0
+nova secgroup-add-rule  LTMI_ACRS_External tcp 8080 8080 0.0.0.0/0
+
+#haproxy stat page /Corp_VPN cover this setup 
+nova secgroup-add-rule  LTMI_ACRS_External tcp 1936 1936 0.0.0.0/0
+
+#ACRS mysql replication port 
+#only opened between ACRS servers 
+nova secgroup-add-group-rule  LTMI_ACRS_External LTMI_ACRS_Internal  tcp 3306 3306
+nova secgroup-add-group-rule  LTMI_ACRS_External tcp 3306 3306 0.0.0.0/0
+
+
+#for nagios server nrpe remote check , only opened for nagios server 
+nova secgroup-add-rule  LTMI_ACRS_External tcp 5666 5666 0.0.0.0/0
+
+#for nagios server GUI launch  
+nova secgroup-add-rule  LTMI_ACRS_External tcp 80 80 0.0.0.0/0
+
+
+#for Vizgem setup on nagios server 
+nova secgroup-add-rule  LTMI_ACRS_External udp 162 162 75.55.96.51/32
+nova secgroup-add-rule  LTMI_ACRS_External udp 1162 1162 75.55.96.51/32
+
+#for rsyslog 
+nova secgroup-add-rule  LTMI_ACRS_External tcp 514 514 0.0.0.0/0
+
+
+#for SAN3 zone splunk forwarder
+#64.143.246.225 is for SQL1 splunk zone forwarder
+#use DPA1 splunk forwarder 108.244.166.66 
+nova secgroup-add-rule  LTMI_ACRS_External tcp 9997 9997 108.244.166.0/24 
+nova secgroup-add-rule  LTMI_ACRS_External tcp 8089 8089 108.244.166.0/24 
+(x)nova secgroup-add-rule  LTMI_ACRS_External tcp 9997 9997 64.143.246.0/24 
+(x)nova secgroup-add-rule  LTMI_ACRS_External tcp 8089 8089 64.143.246.0/24 
+
+###define secrity rule in  LTMI_ACRS_Internal###
+#icmp check for Corp_VPN defined IP 
+nova secgroup-add-group-rule  LTMI_ACRS_Internal LTMI_ACRS_Internal icmp -1 -1
+#nova secgroup-add-group-rule  LTMI_ACRS_Internal LTMI_ACRS_External icmp  -1 -1
+
+#ssh access setup between ACRS VMs
+nova secgroup-add-group-rule LTMI_ACRS_Internal LTMI_ACRS_External tcp 22 22
+nova secgroup-add-group-rule LTMI_ACRS_Internal LTMI_ACRS_Internal tcp 22 22
+
+
+#mysql access setup 
+nova secgroup-add-group-rule   LTMI_ACRS_Internal   LTMI_ACRS_Internal tcp 3306 3306
+#nova secgroup-add-group-rule  LTMI_ACRS_Internal  LTMI_ACRS_External   tcp 3306 3306
+#nova secgroup-add-group-rule LTMI_ACRS_Internal LTMI_ACRS_Internal  tcp 3306 3306
+
+#for nagios server nrpe remote check , only opened for nagios server 
+nova secgroup-add-rule  LTMI_ACRS_Internal tcp 5666 5666 0.0.0.0/0
+#nova secgroup-add-group-rule  LTMI_ACRS_Internal  LTMI_ACRS_External  tcp 5666 5666
+#nova secgroup-add-group-rule  LTMI_ACRS_Internal  LTMI_ACRS_Internal  tcp 5666 5666
+
+nova secgroup-add-group-rule   LTMI_ACRS_Internal   LTMI_ACRS_External tcp 8080 8080
+nova secgroup-add-group-rule   LTMI_ACRS_Internal    LTMI_ACRS_Internal tcp 8080 8080
+nova secgroup-add-group-rule   LTMI_ACRS_Internal   LTMI_ACRS_External tcp 8443 8443
+nova secgroup-add-group-rule   LTMI_ACRS_Internal    LTMI_ACRS_Internal tcp 8443 8443
+nova secgroup-add-group-rule   LTMI_ACRS_Internal   LTMI_ACRS_External tcp 9990 9990
+
+#for Vizgem setup on nagios server 
+nova secgroup-add-rule  LTMI_ACRS_Internal udp 162 162 75.55.96.51/32
+nova secgroup-add-rule  LTMI_ACRS_Internal udp 1162 1162 75.55.96.51/32
+
+#for rsyslog 
+nova secgroup-add-rule  LTMI_ACRS_Internal tcp 514 514 0.0.0.0/0
+#nova secgroup-add-group-rule  LTMI_ACRS_Internal LTMI_ACRS_External tcp 514 514
+#nova secgroup-add-group-rule  LTMI_ACRS_Internal LTMI_ACRS_Internal tcp 514 514
