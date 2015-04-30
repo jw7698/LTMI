@@ -1,8 +1,8 @@
 #!/bin/bash
 #######################################################################
 ## This script is to setup LTMI ACRS subnet                                                                           ##
-## Version 1                                                                                                                                ##
-## created by Jason Wang on March 16, 2015                                                                           ##
+## Version 1.1                                                                                                                                ##
+## created by Jason Wang on April 30, 2015                                                                           ##
 ## Working tenant : SAN3 (ltmi-acrs-prod)                                                                                      ##
 #######################################################################
 #You cannot run source within script
