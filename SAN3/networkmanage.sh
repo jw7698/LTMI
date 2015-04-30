@@ -11,7 +11,7 @@
 set -o nounset
 set -o errexit
 
-LTMIACRS_RT = "ATS-RTR-LTMI"
+LTMIACRS_RT = "ACRS Router"
 LTMIACRS_SUB1 = "LTMI-ACRSNW"
 LTMIACRS_SUB2 = "LTMI-ACRS_IntNW"
 SUB1_IP = "10.10.0.0/24"
