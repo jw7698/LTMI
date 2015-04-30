@@ -58,8 +58,8 @@ nova secgroup-add-rule  LTMI_ACRS_External tcp 514 514 0.0.0.0/0
 #use DPA1 splunk forwarder 108.244.166.66 
 nova secgroup-add-rule  LTMI_ACRS_External tcp 9997 9997 108.244.166.0/24 
 nova secgroup-add-rule  LTMI_ACRS_External tcp 8089 8089 108.244.166.0/24 
-(x)nova secgroup-add-rule  LTMI_ACRS_External tcp 9997 9997 64.143.246.0/24 
-(x)nova secgroup-add-rule  LTMI_ACRS_External tcp 8089 8089 64.143.246.0/24 
+#nova secgroup-add-rule  LTMI_ACRS_External tcp 9997 9997 64.143.246.0/24 
+#nova secgroup-add-rule  LTMI_ACRS_External tcp 8089 8089 64.143.246.0/24 
 
 ###define secrity rule in  LTMI_ACRS_Internal###
 #icmp check for Corp_VPN defined IP 
