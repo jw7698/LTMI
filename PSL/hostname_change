@@ -1,24 +1,25 @@
 #!/bin/bash
-# ----------------------------------------------------------
-#title           :hostname_change 
-#description     :This script is used to update centos hostname from dpa1 to iad1  
-#author          :Jason Wang 
-#email           :jw7698@att.com
-#date            :20141017
-#version         :0.1
-#usage           :1. login to server
-#                :2. bash <(wget -qO - https://raw.githubusercontent.com/jason75023/LTMI/master/PSL/hostname_change)
-# ----------------------------------------------------------
+ # ----------------------------------------------------------
+ #title           :hostname_change 
+ #description     :This script is used to update centos hostname from dpa1 to iad1  
+ #author          :Jason Wang 
+ #email           :jw7698@att.com
+ #date            :20150526
+ #version         :0.2
+ #usage           :1. login to server
+ #                :2. bash <(wget -qO - https://raw.githubusercontent.com/jason75023/LTMI/master/PSL/hostname_change)
+ # ----------------------------------------------------------
+ 
+ read -p "Enter zonename > " z
 
-
-sed -i.bak 's/dpa/iad/' /etc/sysconfig/network
-
-sed -i.bak 's/dpa/iad/' /etc/hosts
-
-
-read -p "Enter hostname > " h
-hostname $h
-
-sed -i.bak 's/dpa/iad/' /etc/motd
-
+#You can use variables in sed as long as it's in a double quote (not a single quote):
+sed -i.bak "s/dpa1/$z/" /etc/sysconfig/network
+ 
+sed -i.bak "s/dpa1/$z/g" /etc/hosts
+ 
+ read -p "Enter hostname > " h
+ hostname $h /etc/hosts
+ 
+ sed -i.bak "s/dpa1/$z/" /etc/motd
+ 
 /etc/init.d/network restart
