@@ -49,9 +49,9 @@ nova secgroup-add-rule  ACRS_External tcp 80 80 0.0.0.0/0
 nova secgroup-add-rule  ACRS_External udp 162 162 75.55.96.51/32
 nova secgroup-add-rule  ACRS_External udp 1162 1162 75.55.96.51/32
 
-#for rsyslog 
+#for rsyslog server/client 
 nova secgroup-add-rule  ACRS_External tcp 514 514 0.0.0.0/0
-
+nova secgroup-add-rule  ACRS_External udp 514 514 0.0.0.0/0
 
 #for SAN3 zone splunk forwarder
 #64.143.246.225 is for SQL1 splunk zone forwarder
