@@ -24,5 +24,6 @@ apt-get update
 
 #test comand output
 nova list
-pause 'Press [Enter] key to continue...'
+#pause 'Press [Enter] key to continue...'
+sleep 5
 glance image-list
