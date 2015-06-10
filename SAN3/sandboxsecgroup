@@ -1,0 +1,20 @@
+#!/bin/bash
+##########################################################################
+## This script is to create security groups:  test                                                                          ##
+## Version 1                                                                                                                                       ##
+## created by Jason Wang on June 10, 2015                                                                                   ##
+## Working tenant : SAN3 (sandbox )                                                                                             ##
+##########################################################################
+#define security group
+nova secgroup-create test  "Security Group for sandbox on SAN3"
+
+#define secrity rule in  test
+nova secgroup-add-rule  test  icmp -1 -1 0.0.0.0/0
+nova secgroup-add-rule  test  tcp 22 22 0.0.0.0/0
+nova secgroup-add-rule  test  tcp 68 68 0.0.0.0/0
+nova secgroup-add-rule  test  tcp 80 80 0.0.0.0/0
+nova secgroup-add-rule  test  tcp 81 81 0.0.0.0/0
+nova secgroup-add-rule  test tcp 443 443 0.0.0.0/0
+nova secgroup-add-rule  test  tcp 5901 5901 0.0.0.0/0
+nova secgroup-add-rule  test  tcp 3000 3000 0.0.0.0/0
+nova secgroup-add-rule  test  tcp 8000 8000 0.0.0.0/0
