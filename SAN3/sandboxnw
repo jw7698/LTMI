@@ -1,0 +1,40 @@
+#!/bin/bash
+#######################################################################
+## This script is to setup LTMIACRS network                          ##
+## created by Jason Wang on June 10 , 2015                           ##
+##Working tenant :  SAN3 (Sandbox_jw7698)                            ##
+#######################################################################
+#You cannot run source within script
+#source   /root/tenentaccess/iad1/iad1-ltm-id-proc-dev
+
+set -o nounset
+set -o errexit
+
+#define router connect to public(external)
+LTMIACRS_RT="Sandbox-Router"
+
+#define subnet:  LTMIACRS_SUB1
+LTMIACRS_SUB1="SANDBOXNW"
+
+
+#define subnet address for LTMIACRS_SUB1
+SUB1_IP="10.10.0.0/24"
+
+
+#create a router which shared for this tenant
+neutron router-create $LTMIACRS_RT
+
+#attach shared router to public network
+neutron router-gateway-set $LTMIACRS_RT public
+
+#create subnet to your specific project
+neutron net-create $LTMIACRS_SUB1
+
+#Define subnet IP range
+neutron subnet-create $LTMIACRS_SUB1  $SUB1_IP --name  $LTMIACRS_SUB1
+
+#extract subnet ID info
+LTMIACRS_SUB1_ID=$(neutron subnet-list | awk  '/'$LTMIACRS_SUB1'/{print $2}')
+
+#Hook shared router to subnet
+neutron  router-interface-add $LTMIACRS_RT  $LTMIACRS_SUB1_ID
