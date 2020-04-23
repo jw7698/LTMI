@@ -9,10 +9,10 @@ function pause(){
 }
 
 #update /etc/hosts file
-echo "135.177.160.119 prod.dcp.aic.att.com" >> /etc/hosts
-echo "135.47.160.33 san3.aic.att.com" >> /etc/hosts
-echo "135.177.160.127 auth.cci.att.com" >> /etc/hosts
-echo "135.213.244.49 image.int.san3.cci.att.com" >> /etc/hosts
+echo "xxx.xxx.xxx.xxx prod.dcp.aic.att.com" >> /etc/hosts
+echo "xxx.xxx.xxx.xxx san3.aic.att.com" >> /etc/hosts
+echo "xxx.xxx.xxx.xxx auth.cci.att.com" >> /etc/hosts
+echo "xxx.xxx.xxx.xxx image.int.san3.cci.att.com" >> /etc/hosts
 
 #install nova and glance command
 apt-get -y install python-novaclient
